@@ -1,0 +1,1 @@
+A direct port of the symfony-project.org form validation scheme to JavaScript. This will be integrated with the existing PokeYoke validation system to provide seamless client side form validation based on the existing server side validation.
