@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Simple Testing Example</title>
+<title>PoYo Tests</title>
 
 <style type="text/css">
 /*margin and padding on body element
@@ -20,6 +20,7 @@ body {
 <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" />
 <script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
 <script type="text/javascript" src="js/PoYo-debug.js"></script>
+<script type="text/javascript" src="js/PoYo/validator/PoYoValidatorBase.js"></script>
 
 
 <!--begin custom header content for this example-->
@@ -65,35 +66,35 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
 		var ValidatorIdentity = function(options, messages) {
 			this._init(options, messages);
 		};
-		ValidatorIdentity.prototype = PoYoValidatorBase.prototype;
-		ValidatorIdentity.prototype.configure = function(options, messages)
+		ValidatorIdentity.prototype = new PoYo.PoYoValidatorBase();
+		ValidatorIdentity.prototype._configure = function(options, messages)
 	  {
 	    this.addOption('foo', 'bar');
 	    this.addMessage('foo', 'bar');
 	  };
 
-		ValidatorIdentity.prototype.testIsEmpty = function(value)
+		ValidatorIdentity.prototype.testIsEmpty = function(v)
 	  {
-	    return this.isEmpty(value);
+	    return this.isEmpty(v);
 	  };
 
-		ValidatorIdentity.prototype.doClean = function(value)
+		ValidatorIdentity.prototype.doClean = function(v)
 	  {
-	    return value;
+	    return v;
 	  };
 
 		var ValidatorIdentityWithRequired = function(options, messages) {
 			this._init(options, messages);
 		};
-		ValidatorIdentityWithRequired.prototype = PoYoValidatorBase.prototype;
+		ValidatorIdentityWithRequired.prototype = new PoYo.PoYoValidatorBase();
 		ValidatorIdentityWithRequired.prototype.configure = function(options, messages)
 	  {
 	    this.addRequiredOption('foo');
 	  };
 
-		ValidatorIdentityWithRequired.prototype.doClean = function(value)
+		ValidatorIdentityWithRequired.prototype.doClean = function(v)
 	  {
-	    return value;
+	    return v;
 	  };
     
     Y.PoYo.test.PoYoBaseValidator = new Y.Test.Case({
@@ -109,8 +110,7 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
          * Sets up data that is needed by each test.
          */
         setUp: function () {
-            this.ValidatorIdentity = new ValidatorIdentity();
-						this.ValidatorIdentityWithRequired = new ValidatorIdentityWithRequired();
+
         },
         
         /*
@@ -128,41 +128,34 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
         testConfigure : function () {
 					this.ValidatorIdentity = new ValidatorIdentity();
 					Y.Assert.areEqual('bar', this.ValidatorIdentity.getOption('foo'), ".configure() can add some options");
-					this.ValidatorIdentity = new ValidatorIdentity({foo: 'foobar'});
+					this.ValidatorIdentity = new ValidatorIdentity({'foo': 'foobar'});
 					Y.Assert.areEqual('foobar', this.ValidatorIdentity.getOption('foo'), ".configure() takes an options array as its first argument and values override default option values");
 					this.ValidatorIdentity = new ValidatorIdentity();
 					Y.Assert.areEqual('bar', this.ValidatorIdentity.getMessage('foo'), ".configure() can add some message");
-					this.ValidatorIdentity = new ValidatorIdentity({}, {foo: 'foobar'});
+					this.ValidatorIdentity = new ValidatorIdentity({}, {'foo': 'foobar'});
 					Y.Assert.areEqual('foobar', this.ValidatorIdentity.getMessage('foo'), ".configure() takes a messages array as its second argument and values override default message values");
+					try
+					{
+					  this.ValidatorIdentity = new ValidatorIdentity({'nonexistant': false, 'foo': 'foobar', 'anothernonexistant': 'bar', 'required': true});
+						Y.Assert.fail('__construct() should throw an InvalidArgumentException if you pass some non existant options');
+					}
+					catch (e)
+					{
+						Y.Assert.areEqual('InvalidArgumentException', e.name, '__construct() throws an InvalidArgumentException if you pass some non existant options');
+					}
+					try
+					{
+					  this.ValidatorIdentity = new ValidatorIdentity({}, {'required': 'This is required.', 'nonexistant': 'foo', 'anothernonexistant': false});
+						Y.Assert.fail('__construct() should throw an InvalidArgumentException if you pass some non existant error codes');
+					}
+					catch (e)
+					{
+						Y.Assert.areEqual('InvalidArgumentException', e.name, '__construct() throws an InvalidArgumentException if you pass some non existant error codes');
+					}
         },
-
-				// ->configure()
-				// $t->diag('->configure()');
 				
 				// 
-				// try
-				// {
-				//   new ValidatorIdentity(array('nonexistant' => false, 'foo' => 'foobar', 'anothernonexistant' => 'bar', 'required' => true));
-				//   $t->fail('__construct() throws an InvalidArgumentException if you pass some non existant options');
-				//   $t->skip();
-				// }
-				// catch (InvalidArgumentException $e)
-				// {
-				//   $t->pass('__construct() throws an InvalidArgumentException if you pass some non existant options');
-				//   $t->like($e->getMessage(), '/ \'nonexistant\', \'anothernonexistant\'/', 'The exception contains the non existant option names');
-				// }
-				// 
-				// try
-				// {
-				//   new ValidatorIdentity(array(), array('required' => 'This is required.', 'nonexistant' => 'foo', 'anothernonexistant' => false));
-				//   $t->fail('__construct() throws an InvalidArgumentException if you pass some non existant error codes');
-				//   $t->skip();
-				// }
-				// catch (InvalidArgumentException $e)
-				// {
-				//   $t->pass('__construct() throws an InvalidArgumentException if you pass some non existant error codes');
-				//   $t->like($e->getMessage(), '/ \'nonexistant\', \'anothernonexistant\'/', 'The exception contains the non existant error codes');
-				// }
+
 				// 
 				// // ->getRequiredOptions()
 				// $t->diag('getRequiredOptions');
