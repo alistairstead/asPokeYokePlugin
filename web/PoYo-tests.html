@@ -20,6 +20,7 @@ body {
 <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" />
 <script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
 <script type="text/javascript" src="js/PoYo-debug.js"></script>
+<script type="text/javascript" src="js/PoYo/exception/PoYoException.js"></script>
 <script type="text/javascript" src="js/PoYo/validator/PoYoValidatorBase.js"></script>
 
 
@@ -141,7 +142,7 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
 					}
 					catch (e)
 					{
-						Y.Assert.areEqual('InvalidArgumentException', e.name, '__construct() throws an InvalidArgumentException if you pass some non existant options');
+						Y.Assert.areEqual('PoYoInvalidArgumentException', e, '__construct() throws an InvalidArgumentException if you pass some non existant options');
 					}
 					try
 					{
@@ -150,7 +151,7 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
 					}
 					catch (e)
 					{
-						Y.Assert.areEqual('InvalidArgumentException', e.name, '__construct() throws an InvalidArgumentException if you pass some non existant error codes');
+						Y.Assert.areEqual('PoYoInvalidArgumentException', e, '__construct() throws an InvalidArgumentException if you pass some non existant error codes');
 					}
         },
 				

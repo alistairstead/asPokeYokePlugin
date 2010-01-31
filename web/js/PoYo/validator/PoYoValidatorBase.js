@@ -44,14 +44,11 @@
 	    var optionKeys = PoYo.object_keys(options);
 	    
 	    // check option values
-			// var diff = PoYo.object_diff(optionKeys, PoYo.object_merge(currentOptionKeys, this._requiredOptions));
-			// 	    if (diff)
-			// 	    {
-			// 	      throw {
-			// 		name: 'InvalidArgumentException',
-			// 		message: "sprintf('%s does not support the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))"
-			// 	};
-			// 	    }
+			var diff = PoYo.object_diff(optionKeys, PoYo.object_merge(currentOptionKeys, PoYo.object_keys(this._requiredOptions)));
+	    if (diff.length)
+	    {
+	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+			}
 	    // 
 	    // // check error code names
 	    // if ($diff = array_diff(array_keys($messages), array_keys($this->messages)))

@@ -3,7 +3,7 @@
 		this._init(options, messages);
 	};
 	
-	PoYo.PoYoValidatorBoolean.prototype = new PoYoValidatorBase();
+	PoYo.PoYoValidatorBoolean.prototype = new PoYo.PoYoValidatorBase();
 	/**
 	 * Configures the current validator.
 	 *

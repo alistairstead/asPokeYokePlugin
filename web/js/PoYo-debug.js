@@ -16,7 +16,7 @@ var PoYo = {};
             retArr[k1] = arr1[k1];
         }
     }
-
+		
     return retArr;
 	};
 	
