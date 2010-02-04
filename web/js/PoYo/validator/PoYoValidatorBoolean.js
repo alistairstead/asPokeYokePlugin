@@ -1,6 +1,6 @@
 (function(){
 	PoYo.PoYoValidatorBoolean = function(options, messages) {
-		this._init(options, messages);
+		this.constructor(options, messages);
 	};
 	
 	PoYo.PoYoValidatorBoolean.prototype = new PoYo.PoYoValidatorBase();

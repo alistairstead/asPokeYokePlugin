@@ -17,7 +17,7 @@
 	 * @param object messages  A messages object
 	 */
 	PoYo.PoYoValidatorBase = function(options, messages) {
-		this._init(options, messages);
+		this.constructor(options, messages);
 	};
 
 	PoYo.PoYoValidatorBase.prototype = {
@@ -31,11 +31,11 @@
 		_messages: {},
 		_options: {},
 
-		_init: function(options, messages) {
+		constructor: function(options, messages) {
 			this._options = PoYo.object_merge({required: true, trim: false, empty_value: null}, this._options);
 			this._messages = PoYo.object_merge({required: this._globalDefaultMessages.required, invalid: this._globalDefaultMessages.invalid}, this._messages);
 
-			this._configure(options, messages);
+			this.configure(options, messages);
 
 			this.setDefaultOptions(this.getOptions());
 			this.setDefaultMessages(this.getMessages());
@@ -47,22 +47,22 @@
 			var diff = PoYo.object_diff(optionKeys, PoYo.object_merge(currentOptionKeys, PoYo.object_keys(this._requiredOptions)));
 	    if (diff.length)
 	    {
-	      throw new PoYo.PoYoInvalidArgumentException("%s does not support the following options: \'%s\'." + diff.toString());
+	      throw new PoYo.PoYoInvalidArgumentException("%s does not support the following options: \'%s\'.");
 			}
 	    
-	    // check error code names
-			// diff = PoYo.object_diff(PoYo.object_keys(messages), PoYo.object_keys(this._messages));
-			// 	    if (diff.length)
-			// 	    {
-			// 	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following error codes: \'%s\'.', get_class($this), implode('\', \'', $diff))");
-			// 	    }
-			// 	    
-			// 	    // check required options
-			// diff = PoYo.object_diff(this._requiredOptions, PoYo.object_merge(currentOptionKeys, optionKeys));
-			// 	    if (diff.length)
-			// 	    {
-			// 	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s requires the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))");
-			// 	    }
+	    //check error code names
+			diff = PoYo.object_diff(PoYo.object_keys(messages), PoYo.object_keys(this._messages));
+	    if (diff.length)
+	    {
+	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following error codes: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+	    }
+				    
+	    // check required options
+			diff = PoYo.object_diff(this._requiredOptions, PoYo.object_merge(currentOptionKeys, optionKeys));
+	    if (diff.length)
+	    {
+	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s requires the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+	    }
 	    
 	    this._options  = PoYo.object_merge(this._options, options);
 	    this._messages = PoYo.object_merge(this._messages, messages);
@@ -83,7 +83,7 @@
 	   *
 	   * @see _init()
 	   */
-		_configure: function(options, messages) {
+		configure: function(options, messages) {
 
 		},
 
@@ -126,10 +126,7 @@
 	  {
 			if(!this._messages.hasOwnProperty(n))
 			{
-				throw {
-					name: 'InvalidArgumentException',
-					message: "sprintf('%s does not support the following error code: \'%s\'.', get_class($this), $n)"
-				};
+				throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following error code: \'%s\'.', get_class($this), $n)");
 			}
 
 	    this._messages[n] = v;
@@ -200,10 +197,7 @@
 	  {
 			if(!this._optionMerge(this._options, this._requiredOptions).hasOwnProperty(n))
 			{
-				throw {
-					name: 'InvalidArgumentException',
-					message: "sprintf('%s does not support the following option: \'%s\'.', get_class($this), $n)"
-				};
+				throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following option: \'%s\'.', get_class($this), $n)");
 			}
 
 			this._options[n] = v;
@@ -435,7 +429,7 @@
 	   *
 	   * @return string The string representation of the validator
 	   */
-	  asString: function(indent)
+	  toString: function(indent)
 	  {
 	    // $options = $this->getOptionsWithoutDefaults();
 	    // $messages = $this->getMessagesWithoutDefaults();

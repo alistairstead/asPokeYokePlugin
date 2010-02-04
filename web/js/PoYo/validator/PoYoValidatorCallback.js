@@ -1,6 +1,6 @@
 (function(){
 	PoYo.PoYoValidatorCallback = function(options, messages) {
-		this._init(options, messages);
+		this.constructor(options, messages);
 	};
 	
 	/**
