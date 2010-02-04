@@ -6,7 +6,7 @@
 	 */
 	PoYo.PoYoException = function(message) {
 		this.message = message;
-		this._name = 'PoYoException';
+		this.name = 'PoYoException';
 		
 		return this;
 	};
@@ -25,4 +25,9 @@
 		return this;
 	};
 	PoYo.PoYoInvalidArgumentException.prototype = new PoYo.PoYoException();
+	
+	PoYo.PoYoValidatorError = function(validator, message) {
+		this.validator = validator;
+		this.message = message;
+	};
 })();
