@@ -68,10 +68,10 @@ YUI({base:"../../yui/build/", timeout: 10000}).use("node", "console", "test",fun
     Y.namespace("PoYo.test");
 
 		var ValidatorIdentity = function(options, messages) {
-			this._init(options, messages);
+			this.constructor(options, messages);
 		};
 		ValidatorIdentity.prototype = new PoYo.PoYoValidatorBase();
-		ValidatorIdentity.prototype._configure = function(options, messages)
+		ValidatorIdentity.prototype.configure = function(options, messages)
 	  {
 	    this.addOption('foo', 'bar');
 	    this.addMessage('foo', 'bar');
@@ -88,7 +88,7 @@ YUI({base:"../../yui/build/", timeout: 10000}).use("node", "console", "test",fun
 	  };
 
 		var ValidatorIdentityWithRequired = function(options, messages) {
-			this._init(options, messages);
+			this.constructor(options, messages);
 		};
 		ValidatorIdentityWithRequired.prototype = new PoYo.PoYoValidatorBase();
 		ValidatorIdentityWithRequired.prototype.configure = function(options, messages)
@@ -106,12 +106,14 @@ YUI({base:"../../yui/build/", timeout: 10000}).use("node", "console", "test",fun
         //name of the test case - if not provided, one is auto-generated
         name : "PoYoBaseValidator Tests",
 
-				// _should: {
-				// 	error: {
-				// 		testNonExistantOption: new PoYo.PoYoInvalidArgumentException(),
-				// 		testNonExistantErrorCode: new PoYo.PoYoInvalidArgumentException()
-				// 	}
-				// },
+				_should: {
+					error: {
+						testNonExistantOption: new PoYo.PoYoInvalidArgumentException(),
+						testNonExistantErrorCode: new PoYo.PoYoInvalidArgumentException(),
+						testRequiredOptionsException: new PoYo.PoYoInvalidArgumentException(),
+						testCleanException: 
+					}
+				},
         
         //---------------------------------------------------------------------
         // setUp and tearDown methods - optional
@@ -157,29 +159,29 @@ YUI({base:"../../yui/build/", timeout: 10000}).use("node", "console", "test",fun
 					this.ValidatorIdentity = new ValidatorIdentity({}, {'required': 'This is required.', 'nonexistant': 'foo', 'anothernonexistant': false});
 				},
 				
-				// 
+				testRequiredOptions: function()
+				{
+					this.ValidatorIdentityWithRequired = new ValidatorIdentityWithRequired({'foo': 'bar'});
+					Y.Assert.areEqual({'foo': true}, this.ValidatorIdentityWithRequired.getRequiredOptions(), "getRequiredOptions() returns an array of required option names");
+				},
+				
+				testRequiredOptionsException: function()
+				{
+					this.ValidatorIdentityWithRequired = new ValidatorIdentityWithRequired();
+				},
+				
+				testClean: function()
+				{
+					this.ValidatorIdentity = new ValidatorIdentity();
+					Y.Assert.areEqual('foo', this.ValidatorIdentity.clean('foo'), "clean() returns a cleanup version of the data to validate");
+				},
+				
+				testCleanException: function()
+				{
+					this.ValidatorIdentity = new ValidatorIdentity();
+					Y.Assert.areEqual(false, this.ValidatorIdentity.clean(), "clean() should throw an PoYoValidatorError exception if the data does not validate");
+				},
 
-				// 
-				// // ->getRequiredOptions()
-				// $t->diag('getRequiredOptions');
-				// $v = new ValidatorIdentityWithRequired(array('foo' => 'bar'));
-				// $t->is($v->getRequiredOptions(), array('foo'), '->getRequiredOptions() returns an array of required option names');
-				// 
-				// try
-				// {
-				//   new ValidatorIdentityWithRequired();
-				//   $t->fail('__construct() throws an RuntimeException if you don\'t pass a required option');
-				// }
-				// catch (RuntimeException $e)
-				// {
-				//   $t->pass('__construct() throws an RuntimeException if you don\'t pass a required option');
-				// }
-				// 
-				// $v = new ValidatorIdentity();
-				// 
-				// // ->clean()
-				// $t->diag('->clean()');
-				// $t->is($v->clean('foo'), 'foo', '->clean() returns a cleanup version of the data to validate');
 				// try
 				// {
 				//   $t->is($v->clean(''), '');
