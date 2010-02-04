@@ -47,21 +47,23 @@
 			var diff = PoYo.object_diff(optionKeys, PoYo.object_merge(currentOptionKeys, PoYo.object_keys(this._requiredOptions)));
 	    if (diff.length)
 	    {
-	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+	      throw new PoYo.PoYoInvalidArgumentException("%s does not support the following options: \'%s\'." + diff.toString());
 			}
-	    // 
-	    // // check error code names
-	    // if ($diff = array_diff(array_keys($messages), array_keys($this->messages)))
-	    // {
-	    //   throw new InvalidArgumentException(sprintf('%s does not support the following error codes: \'%s\'.', get_class($this), implode('\', \'', $diff)));
-	    // }
-	    // 
-	    // // check required options
-	    // if ($diff = array_diff($this->requiredOptions, array_merge($currentOptionKeys, $optionKeys)))
-	    // {
-	    //   throw new RuntimeException(sprintf('%s requires the following options: \'%s\'.', get_class($this), implode('\', \'', $diff)));
-	    // }
-	    // 
+	    
+	    // check error code names
+			// diff = PoYo.object_diff(PoYo.object_keys(messages), PoYo.object_keys(this._messages));
+			// 	    if (diff.length)
+			// 	    {
+			// 	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s does not support the following error codes: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+			// 	    }
+			// 	    
+			// 	    // check required options
+			// diff = PoYo.object_diff(this._requiredOptions, PoYo.object_merge(currentOptionKeys, optionKeys));
+			// 	    if (diff.length)
+			// 	    {
+			// 	      throw new PoYo.PoYoInvalidArgumentException("sprintf('%s requires the following options: \'%s\'.', get_class($this), implode('\', \'', $diff))");
+			// 	    }
+	    
 	    this._options  = PoYo.object_merge(this._options, options);
 	    this._messages = PoYo.object_merge(this._messages, messages);
 		},

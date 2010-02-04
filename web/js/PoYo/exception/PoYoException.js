@@ -15,12 +15,12 @@
 	// a string (e.g. by the error console)
 	PoYo.PoYoException.prototype.toString = function ()
 	{
-	  return this._name;
+	  return this.name + ': '+this.message;
 	};
 	
 	PoYo.PoYoInvalidArgumentException = function(message) {
 		this.message = message;
-		this._name = 'PoYoInvalidArgumentException';
+		this.name = 'PoYoInvalidArgumentException';
 		
 		return this;
 	};

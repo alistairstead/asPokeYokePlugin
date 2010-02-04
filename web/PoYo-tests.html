@@ -17,8 +17,10 @@ body {
 }
 </style>
 
-<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" />
-<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+<!-- <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script> -->
+<link type="text/css" rel="stylesheet" href="../../yui/build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../yui/build/yui/yui-min.js"></script>
 <script type="text/javascript" src="js/PoYo-debug.js"></script>
 <script type="text/javascript" src="js/PoYo/exception/PoYoException.js"></script>
 <script type="text/javascript" src="js/PoYo/validator/PoYoValidatorBase.js"></script>
@@ -60,7 +62,8 @@ body {
 
 <div id="testLogger"></div>
 <script type="text/javascript">
-YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) {
+YUI({base:"../../yui/build/", timeout: 10000}).use("node", "console", "test",function (Y) {
+//YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) {
 
     Y.namespace("PoYo.test");
 
@@ -102,6 +105,13 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
     
         //name of the test case - if not provided, one is auto-generated
         name : "PoYoBaseValidator Tests",
+
+				// _should: {
+				// 	error: {
+				// 		testNonExistantOption: new PoYo.PoYoInvalidArgumentException(),
+				// 		testNonExistantErrorCode: new PoYo.PoYoInvalidArgumentException()
+				// 	}
+				// },
         
         //---------------------------------------------------------------------
         // setUp and tearDown methods - optional
@@ -135,25 +145,17 @@ YUI({combine: true, timeout: 10000}).use("node", "console", "test",function (Y) 
 					Y.Assert.areEqual('bar', this.ValidatorIdentity.getMessage('foo'), ".configure() can add some message");
 					this.ValidatorIdentity = new ValidatorIdentity({}, {'foo': 'foobar'});
 					Y.Assert.areEqual('foobar', this.ValidatorIdentity.getMessage('foo'), ".configure() takes a messages array as its second argument and values override default message values");
-					try
-					{
-					  this.ValidatorIdentity = new ValidatorIdentity({'nonexistant': false, 'foo': 'foobar', 'anothernonexistant': 'bar', 'required': true});
-						Y.Assert.fail('__construct() should throw an InvalidArgumentException if you pass some non existant options');
-					}
-					catch (e)
-					{
-						Y.Assert.areEqual('PoYoInvalidArgumentException', e, '__construct() throws an InvalidArgumentException if you pass some non existant options');
-					}
-					try
-					{
-					  this.ValidatorIdentity = new ValidatorIdentity({}, {'required': 'This is required.', 'nonexistant': 'foo', 'anothernonexistant': false});
-						Y.Assert.fail('__construct() should throw an InvalidArgumentException if you pass some non existant error codes');
-					}
-					catch (e)
-					{
-						Y.Assert.areEqual('PoYoInvalidArgumentException', e, '__construct() throws an InvalidArgumentException if you pass some non existant error codes');
-					}
         },
+
+				testNonExistantOption: function()
+				{
+					this.ValidatorIdentity = new ValidatorIdentity({'nonexistant': false, 'foo': 'foobar', 'anothernonexistant': 'bar', 'required': true});
+				},
+				
+				testNonExistantErrorCode: function()
+				{
+					this.ValidatorIdentity = new ValidatorIdentity({}, {'required': 'This is required.', 'nonexistant': 'foo', 'anothernonexistant': false});
+				},
 				
 				// 
 

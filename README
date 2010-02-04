@@ -1,1 +1,5 @@
-A direct port of the symfony-project.org form validation scheme to JavaScript. This will be integrated with the existing PokeYoke validation system to provide seamless client side form validation based on the existing server side validation.
+This is a symfony plugin that aims to provide the same interface for validating forms on the client browser as is available to the server through the sfForm framework and the sfValidators.
+
+It is based on my orginal sfPokeYokePlugin, developed for the 1.0 branch of symfony.
+
+This is a direct port of the symfony-project.org form validation scheme to JavaScript. This will be integrated with the existing PokeYoke validation system to provide seamless client side form validation based on the existing server side validation.
