@@ -3,6 +3,7 @@
 		this.constructor(options, messages);
 	};
 	
+	PoYo.PoYoValidatorCallback.prototype = new PoYo.PoYoValidatorBase();
 	/**
    * Configures the current validator.
    *
